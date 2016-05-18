@@ -1,0 +1,1 @@
+d:\Compillers\CodeBlocks\MinGW\bin\mingw32-make.exe flash
