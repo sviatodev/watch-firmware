@@ -17,12 +17,13 @@ PR      = "C:/Program Files (x86)/STMicroelectronics/STM32 ST-LINK Utility/ST-LI
 ###################################################
 # Set paths
 BIN_PATH = Bin
-OBJ_PATH = Obj
+OBJ_PATH = Obj/$(PROJ_NAME)
 
 # Set Sources
 SRCS = $(wildcard mx-gen/Drivers/CMSIS/Device/ST/STM32L1xx/Source/Templates/*.c) \
        $(wildcard mx-gen/Drivers/STM32L1xx_HAL_Driver/Src/*.c) \
        $(wildcard mx-gen/Src/*.c) \
+	   $(wildcard ../SSD1306/*.c) \
 	   $(wildcard *.c)
 
 # Set Objects
@@ -33,7 +34,9 @@ OBJS = $(patsubst %,$(OBJ_PATH)/%,$(SRCS:.c=.o)) \
 INCLUDES = -Imx-gen/Drivers/CMSIS/Device/ST/STM32L1xx/Include/ \
            -Imx-gen/Drivers/CMSIS/Include/ \
            -Imx-gen/Drivers/STM32L1xx_HAL_Driver/Inc/ \
-           -Imx-gen/Inc/
+           -Imx-gen/Inc/ \
+		   -I../SSD1306/ \
+		   -I../$(PROJ_NAME)/
 
 # Set Libraries
 LIBS  = -lm -lc
@@ -62,7 +65,7 @@ LDFILE   = -Tmx-gen/TrueSTUDIO/mx-gen/STM32L151CB_FLASH.ld
 # -Os						: Optimize for size
 # -O0						: Don't optimize
 # -g						: Produce debugging information
-CFLAGS = $(MCU) $(FPU) $(DEFINES) $(INCLUDES) -Wall -std=gnu90 \
+CFLAGS = $(MCU) $(FPU) $(DEFINES) $(INCLUDES) -Wall -std=gnu11 \
          -ffunction-sections -fdata-sections -Os
 
 # -Wa,--warn 				: Don't suppress warning messages
@@ -87,6 +90,7 @@ dirs:
 	$(MKDIR) -p $(OBJ_PATH)/mx-gen/Drivers/CMSIS/Device/ST/STM32L1xx/Source/Templates/gcc
 	$(MKDIR) -p $(OBJ_PATH)/mx-gen/Drivers/STM32L1xx_HAL_Driver/Src
 	$(MKDIR) -p $(OBJ_PATH)/mx-gen/Src
+	$(MKDIR) -p $(OBJ_PATH)/../SSD1306
 
 $(OBJ_PATH)/%.o : %.c Makefile
 	@$(CC) $(CFLAGS) -c $< -o $@
